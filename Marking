@@ -1,0 +1,31 @@
+(Account ID)
+aws sts get-caller-identity --query "Account" --output text
+
+(VPC,EC2)
+echo "=== VPC LIST==="
+aws ec2 describe-vpcs --query 'Vpcs[*].[VpcId,CidrBlock]' --output text 
+
+echo "=== EC2 LIST ==="
+aws ec2 describe-instances --query 'Reservations[*].Instances[*].[InstanceId,State.Name]' --output text  
+
+(Only VPC)
+aws ec2 describe-vpcs \
+    --filters "Name=tag:Name,Values=VPC Name" \
+    --query "Vpcs[*].[Tags[?Key==\`Name\`].Value | [0], VpcId]" \
+    --output table
+
+(Only EC2)
+aws ec2 describe-instances \
+    --filters "Name=tag:Name,Values=Instances Name" \
+    --query "Reservations[*].Instances[*].[InstanceId,State.Name,PublicIpAddress]" \
+    --output table
+
+(EC2 Instance Tag)
+INSTANCE_ID="Instance ID"
+
+echo "=== EC2 Tag ==="
+
+aws ec2 describe-tags \
+  --filters "Name=resource-id,Values=$INSTANCE_ID" \
+  --query 'Tags[*].[Key,Value]' \
+  --output text 
