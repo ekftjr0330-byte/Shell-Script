@@ -29,3 +29,15 @@ aws ec2 describe-tags \
   --filters "Name=resource-id,Values=$INSTANCE_ID" \
   --query 'Tags[*].[Key,Value]' \
   --output text 
+
+(S3)
+aws s3 mb s3://<Bucket Name]
+
+(IAM)
+aws iam create-user --user-name [user name]
+
+(ECR)
+aws ecr create-repository --repository-name <REPOSITORY_NAME>
+
+(ECS)
+aws ecs create-cluster --cluster-name [cluster Name]
