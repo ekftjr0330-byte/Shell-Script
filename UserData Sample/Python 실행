@@ -1,0 +1,10 @@
+#!/bin/bash
+mkdir -p /home/ec2-user/app/
+rm -rf /var/log/app/app.log
+mkdir -p /var/log/app
+chown ec2-user:ec2-user /var/log/app
+cat <<'EOF' > /home/ec2-user/main.py
+
+
+EOF
+python3 /home/ec2-user/main.py >>/var/log/app/app.log 2>&1 &

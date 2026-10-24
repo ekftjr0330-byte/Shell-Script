@@ -1,0 +1,28 @@
+#!/bin/bash
+sudo tee /opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json > /dev/null <<'EOF'
+{
+  "logs": {
+    "logs_collected": {
+      "files": {
+        "collect_list": [
+          {
+            "file_path": "/var/log/app/app.log",
+            "log_group_name": "wsc/asg/application",
+            "log_stream_name": "wsc_app_{instance_id}",
+            "retention_in_days": 7,
+            "timestamp_format": "%Y-%m-%d %H:%M:%S",
+            "timezone": "Local",
+            "filters": [
+              {
+                "type": "exclude",
+                "expression": "GET /healthcheck"
+              }
+            ]
+          }
+        ]
+      }
+    }
+  }
+}
+EOF
+/opt/aws/amazon-cloudwatch-agent/bin/amazon-cloudwatch-agent-ctl -a fetch-config -m ec2 -s -c file:/opt/aws/amazon-cloudwatch-agent/etc/amazon-cloudwatch-agent.json
